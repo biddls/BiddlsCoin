@@ -1,0 +1,23 @@
+FaH => erc20
+case => erc20
+skins => erc1559
+userScore => NA
+updateScore => userScore, ChainLink
+mintFaH => FaH
+dex => SushiSwap mby IDK
+openCase => skins
+
+todo:
+link FaH ID to an address to create a user
+update score
+    mint FaH coin
+        needs to allow a minter from another contract to be able to come in and mint new coins to do things with them
+    mby swap to case automatically
+        will need to use a AMM - probably SushiSwap
+    mby open case automatically
+open case system
+    randomly pick skin
+    mint skin
+    mby mint biddls coin not sure
+add skins to system
+    mby make it a votable thing
