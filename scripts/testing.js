@@ -34,7 +34,10 @@ const testing = async function() {
     // Contract interactions for everything to run nicely
     await CS_Case.updateMinter(CS_Skin.address); // sets the external minter
     await FAH.updateMinter(CS_Skin.address); // sets the external minter
-    await CS_Skin.setContracts(FAH.address, CS_Case.address, UniswapV2Factory.address);
+    await CS_Skin.setContracts(FAH.address,
+        CS_Case.address,
+        UniswapV2Factory.address,
+        UniswapV2Router02.address);
 
     return {balance: balance,
         FAH: FAH,

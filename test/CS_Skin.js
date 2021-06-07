@@ -65,7 +65,7 @@ describe("CS Skin", function () {
 
             expect(await vars.CS_Skin.getScore("test")).to.equal(10);
 
-            expect(await vars.FAH.balanceOf(vars.addr1.address)).to.equal(10);
+            expect(await vars.FAH.balanceOf(vars.CS_Skin.address)).to.equal(10);
         });
         it("Skin minting", async function () {
             await vars.CS_Skin.newSkin(10);

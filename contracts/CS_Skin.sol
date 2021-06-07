@@ -14,12 +14,17 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
 
     function updateScore(uint256 _score, string memory _id) public {
         uint256 change = _updateScore(_score, _id);
-        mintFAH(change, getAddress(_id));
+        mintFAH(change);
     }
 
     function supportsInterface(bytes4 interfaceId)
     public view virtual override(AccessControlEnumerable, ERC1155PresetMinterPauser, ERC1155Receiver)
     returns (bool) {
         return super.supportsInterface(interfaceId);
+    }
+
+    function newItem(uint256 _amount) public {
+        _newSkin(_amount);
+        mintCS_Cases(_amount * (10**CS_Case.decimals()));
     }
 }

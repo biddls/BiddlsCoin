@@ -14,7 +14,7 @@ contract Skins is ERC1155PresetMinterPauser{
         grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
-    function newSkin(uint256 _amount) public virtual {
+    function _newSkin(uint256 _amount) internal virtual {
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "No permission to mint");
         mint(address(this), uniqueSkinCount, _amount, "");
         uniqueSkinCount++;
