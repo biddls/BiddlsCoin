@@ -1,22 +1,25 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "../interfaces/IERC_20_EXTERNAL_MINTER.sol";
+import "../contracts/SushiSwap/interfaces/IUniswapV2Factory.sol";
+import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 
 contract minter is AccessControlEnumerable{
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant LOCAL_MINTER_ROLE = keccak256("MINTER_ROLE");
     IERC_20_EXTERNAL_MINTER FAH;
     IERC_20_EXTERNAL_MINTER CS_Case;
+    IUniswapV2Factory Sushi;
 
     constructor() {
-        _setupRole(MINTER_ROLE, _msgSender());
+        _setupRole(LOCAL_MINTER_ROLE, _msgSender());
     }
 
-    function setContracts(address _FAH, address _CS_Case) public {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Does not have role");
+    function setContracts(address _FAH, address _CS_Case, address _Sushi) public {
+        require(hasRole(LOCAL_MINTER_ROLE, _msgSender()), "Does not have role");
         FAH = IERC_20_EXTERNAL_MINTER(address(_FAH));
         CS_Case = IERC_20_EXTERNAL_MINTER(address(_CS_Case));
+        Sushi = IUniswapV2Factory(address(_Sushi));
     }
 
     function mintFAH(uint256 _amount, address _to) internal {
