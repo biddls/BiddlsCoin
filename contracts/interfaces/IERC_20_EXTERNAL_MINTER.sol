@@ -7,4 +7,5 @@ interface IERC_20_EXTERNAL_MINTER is IERC20{
     function decimals() external view returns (uint8);
     function externalMint(uint256 _amount, address _to) external;
     function updateMinter(address _address) external;
+    function burn(uint256 amount) external;
 }
