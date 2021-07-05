@@ -34,8 +34,9 @@ const testing = async function() {
     // Contract interactions for everything to run nicely
     await CS_Case.updateMinter(CS_Skin.address); // sets the external minter
     await FAH.updateMinter(CS_Skin.address); // sets the external minter
-    let FAH_Amount = 1000;
-    await CS_Skin.poolSetup(FAH_Amount); // sets up the sushi pool and sends the LP tokens to the 0 address
+    let Amount = 1000;
+    await CS_Skin.newSkin(Amount); // sets up the sushi pool and sends the LP tokens to the 0 address
+    await CS_Skin.poolSetup(Amount); // sets up the sushi pool and sends the LP tokens to the 0 address
 
 
     return {balance: balance,
@@ -50,7 +51,7 @@ const testing = async function() {
         addr1: addr1,
         addr2: addr2,
         addrs: addrs,
-        FAH_Amount: FAH_Amount};
+        amount: Amount};
 }
 
 const testingGeneral = async function(decimals) {

@@ -26,7 +26,7 @@ contract ERC_20_EXTERNAL_MINTER is ERC20PresetMinterPauser {
         require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "Admin only");
         // Optimistically grands role to new address
         grantRole(EXTERNAL_MINTER, _address);
-        // This ensures that the hang over was successful
+        // This ensures that the hand over was successful
         require(hasRole(EXTERNAL_MINTER, _address), "role has been received");
         // This removes the role from the previous minter
         revokeRole(EXTERNAL_MINTER, EXTERNAL_MINTER_ADDRESS);
@@ -40,9 +40,9 @@ contract ERC_20_EXTERNAL_MINTER is ERC20PresetMinterPauser {
     function externalMint(uint256 _amount, address _to) public {
         // This ensures that the address asking to mint coins has the right to
         require(hasRole(EXTERNAL_MINTER, _msgSender()), "Minter Address only");
-        uint256 _start_bal = balanceOf(_msgSender());
+        uint256 _start_bal = balanceOf(_to);
         _mint(_to, _amount);
-        require(balanceOf(_msgSender()) - _start_bal == _amount, "Correct amount not minted");
+        require(balanceOf(_to) - _start_bal == _amount, "Correct amount not minted");
 
     }
     //address("address").call{value: 0 ether}(abi.encodeWithSignature("function_name(value_type1, value_type2)", value1, value2));

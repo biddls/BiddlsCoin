@@ -38,28 +38,16 @@ contract minter is AccessControlEnumerable{
     function poolSetup(uint256 _FAH_amount) public {
         //adding the original liquidity
         FAH.externalMint(_FAH_amount, address(this));
-        router.addLiquidity(
-            address(FAH),
-            address(CS_Case),
-            1000,
-            1000,
-            1000,
-            1000,
-            address(0),
-            9999999999);
+//        router.addLiquidity(
+//            address(FAH),
+//            address(CS_Case),
+//            1000,
+//            1000,
+//            1000,
+//            1000,
+//            address(0),
+//            9999999999);
     }
-
-//    function mintFAH(uint256 _amount) internal {
-//        uint256 _start_bal = FAH.balanceOf(address(this));
-//        FAH.externalMint(_amount, address(this));
-//        require(FAH.balanceOf(address(this)) - _start_bal == _amount, "Correct amount not minted");
-//    }
-
-//    function mintCS_Case(uint256 _amount) internal {
-//        uint256 _start_bal = CS_Case.balanceOf(address(this));
-//        CS_Case.externalMint(_amount, address(this));
-//        require(CS_Case.balanceOf(address(this)) - _start_bal == _amount, "Correct amount not minted");
-//    }
 
     function CS_Cases_to_FAH(uint256 _amount, uint256 _slippage, uint256 deadline) internal {
         require(_slippage < 1000);

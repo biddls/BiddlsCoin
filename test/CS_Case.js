@@ -13,7 +13,7 @@ describe("CS_Case token", function () {
         it("Deployment checks", async function () {
             const ownerBalance = await vars.CS_Case.balanceOf(vars.owner.address);
 
-            expect(await vars.CS_Case.totalSupply()).to.equal(ownerBalance);
+            expect(await vars.CS_Case.totalSupply()).to.equal(ownerBalance + vars.amount);
             expect(await vars.CS_Case.name()).to.equal("CS:GO Case");
             expect(await vars.CS_Case.symbol()).to.equal("CSC");
             expect(await vars.CS_Case.decimals()).to.equal(18);

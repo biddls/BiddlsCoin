@@ -30,12 +30,11 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
     function newSkin(uint256 _amount) public {
         _newSkin(_amount);
         CS_Case.externalMint(_amount, address(this));
-        CS_Cases_to_FAH(_amount * (10**CS_Case.decimals()), 97, 10000000000);
     }
 
     // allows a user to update their score
     function updateScore(uint256 _score, string memory _id) public {
         uint256 change = _updateScore(_score, _id);
-        FAH.externalMint(change, _msgSender());
+        FAH.externalMint(change, getAddress(_id));
     }
 }

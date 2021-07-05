@@ -13,7 +13,7 @@ describe("CS Skin", function () {
         it("Deployment checks", async function () {
             const ownerBalance = await vars.CS_Case.balanceOf(vars.owner.address);
 
-            expect(await vars.CS_Case.totalSupply()).to.equal(ownerBalance);
+            expect(await vars.CS_Case.totalSupply()).to.equal(ownerBalance + vars.amount);
             expect(await vars.CS_Case.name()).to.equal("CS:GO Case");
             expect(await vars.CS_Case.symbol()).to.equal("CSC");
             expect(await vars.CS_Case.decimals()).to.equal(18);
@@ -24,6 +24,10 @@ describe("CS Skin", function () {
         link to AMM
         link to test minter thingy
         */
+        it("AMM setup", async function () {
+            expect(await vars.CS_Case.balanceOf(vars.CS_Skin.address)).to.equal(vars.amount);
+            expect(await vars.FAH.balanceOf(vars.CS_Skin.address)).to.equal(vars.amount);
+        })
     });
     describe("User management", async function () {
         it("Signup checks", async function () {
@@ -65,7 +69,7 @@ describe("CS Skin", function () {
 
             expect(await vars.CS_Skin.getScore("test")).to.equal(10);
 
-            expect(await vars.FAH.balanceOf(vars.CS_Skin.address)).to.equal(10);
+            expect(await vars.FAH.balanceOf(vars.addr1.address)).to.equal(10);
         });
         it("Skin minting", async function () {
             await vars.CS_Skin.newSkin(10);
