@@ -9,7 +9,13 @@ import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
 // this version will assume that everyone is nice... for now
 contract CS_Skin is users, minter, Skins, ERC1155Holder{
-    constructor(){
+    constructor(address _FAH,
+        address _CS_Case,
+        address _SushiFactory,
+        address _SushiRouter) minter(_FAH,
+        _CS_Case,
+        _SushiFactory,
+        _SushiRouter){
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -20,17 +26,16 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
         return super.supportsInterface(interfaceId);
     }
 
-    function newItem(uint256 _amount) public {
+    // makes a new skin then sells the cases to the sushi pool so people can buy them
+    function newSkin(uint256 _amount) public {
         _newSkin(_amount);
-        mintCS_Cases(_amount * (10**CS_Case.decimals()), 97, 10000000000);
+        CS_Case.externalMint(_amount, address(this));
+        CS_Cases_to_FAH(_amount * (10**CS_Case.decimals()), 97, 10000000000);
     }
 
+    // allows a user to update their score
     function updateScore(uint256 _score, string memory _id) public {
         uint256 change = _updateScore(_score, _id);
-        mintFAH(change);
-    }
-
-    function updateSwap(uint256 _score, string memory _id) public {
-        updateScore(_score, _id);
+        FAH.externalMint(change, _msgSender());
     }
 }

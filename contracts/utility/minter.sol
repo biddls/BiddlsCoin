@@ -11,55 +11,68 @@ contract minter is AccessControlEnumerable{
     bytes32 public constant LOCAL_MINTER_ROLE = keccak256("MINTER_ROLE");
     IERC_20_EXTERNAL_MINTER FAH;
     IERC_20_EXTERNAL_MINTER CS_Case;
-    IUniswapV2Factory SushiFactory;
-    IUniswapV2Router02 SushiRouter;
+    IUniswapV2Factory factory;
+    IUniswapV2Router02 router;
     IUniswapV2Pair pair_FAH_CS;
     address pair_FAH_CS_Addr;
 
-    constructor() {
-        _setupRole(LOCAL_MINTER_ROLE, _msgSender());
-    }
-
-    function setContracts(address _FAH,
+    constructor(address _FAH,
         address _CS_Case,
         address _SushiFactory,
-        address _SushiRouter) public {
+        address _SushiRouter) {
+        _setupRole(LOCAL_MINTER_ROLE, _msgSender());
+
+        //set up of sushi integration
         require(hasRole(LOCAL_MINTER_ROLE, _msgSender()), "Does not have role");
         FAH = IERC_20_EXTERNAL_MINTER(address(_FAH));
         CS_Case = IERC_20_EXTERNAL_MINTER(address(_CS_Case));
-        SushiFactory = IUniswapV2Factory(address(_SushiFactory));
-        SushiRouter = IUniswapV2Router02(address(_SushiRouter));
+        factory = IUniswapV2Factory(address(_SushiFactory));
+        router = IUniswapV2Router02(address(_SushiRouter));
 
-        pair_FAH_CS_Addr = SushiFactory.createPair(_FAH, _CS_Case);
+//        pair_FAH_CS_Addr = SushiFactory.createPair(_FAH, _CS_Case);
+//        pair_FAH_CS = IUniswapV2Pair(address(pair_FAH_CS_Addr));
+        FAH.approve(_SushiRouter,10**18);
+        CS_Case.approve(_SushiRouter,10**18);
     }
 
-    function mintFAH(uint256 _amount) internal {
-        uint256 _start_bal = FAH.balanceOf(address(this));
-        FAH.externalMint(_amount, address(this));
-        require(FAH.balanceOf(address(this)) - _start_bal == _amount, "Correct amount not minted");
+    function poolSetup(uint256 _FAH_amount) public {
+        //adding the original liquidity
+        FAH.externalMint(_FAH_amount, address(this));
+        router.addLiquidity(
+            address(FAH),
+            address(CS_Case),
+            1000,
+            1000,
+            1000,
+            1000,
+            address(0),
+            9999999999);
     }
 
-    function mintCS_Cases(uint256 _amount, uint256 _slippage, uint256 deadline) internal {
+//    function mintFAH(uint256 _amount) internal {
+//        uint256 _start_bal = FAH.balanceOf(address(this));
+//        FAH.externalMint(_amount, address(this));
+//        require(FAH.balanceOf(address(this)) - _start_bal == _amount, "Correct amount not minted");
+//    }
+
+//    function mintCS_Case(uint256 _amount) internal {
+//        uint256 _start_bal = CS_Case.balanceOf(address(this));
+//        CS_Case.externalMint(_amount, address(this));
+//        require(CS_Case.balanceOf(address(this)) - _start_bal == _amount, "Correct amount not minted");
+//    }
+
+    function CS_Cases_to_FAH(uint256 _amount, uint256 _slippage, uint256 deadline) internal {
         require(_slippage < 1000);
-        CS_Case.externalMint(_amount, address(this));
         (uint112 tok1, uint112 tok2,) = pair_FAH_CS.getReserves();
-        uint out = SushiRouter.getAmountOut(_amount,tok1,tok2);
-        SushiRouter.swapExactTokensForTokens(_amount,
+        uint out = router.getAmountOut(_amount,tok1,tok2);
+        address[] memory path = new address[](2);
+        path[0] = address(CS_Case);
+        path[1] = address(FAH);
+        router.swapExactTokensForTokens(_amount,
             (out*_slippage)/1000,
-            [address(CS_Case), address(FAH)],
+            path,
             address(this),
             deadline);
         FAH.burn(FAH.balanceOf(address(this)));
-    }
-
-    function FAH_2_CS(uint256 _amount, uint256 _slippage, uint256 deadline) internal {
-        require(_slippage < 1000);
-        (uint112 tok1, uint112 tok2,) = pair_FAH_CS.getReserves();
-        uint out = SushiRouter.getAmountOut(_amount,tok2,tok1);
-        SushiRouter.swapExactTokensForTokens(_amount,
-            (out*_slippage)/1000,
-            [address(FAH), address(CS_Case)],
-            address(this),
-            deadline);
     }
 }

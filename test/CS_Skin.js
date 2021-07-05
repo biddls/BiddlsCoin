@@ -72,10 +72,11 @@ describe("CS Skin", function () {
             await vars.CS_Skin.newSkin(20);
             await vars.CS_Skin.newSkin(1);
 
-            expect(await vars.CS_Skin.getSkinAvailability(0)).to.equal(10);
-            expect(await vars.CS_Skin.getSkinAvailability(1)).to.equal(20);
-            expect(await vars.CS_Skin.getSkinAvailability(2)).to.equal(1);
-            await expect(vars.CS_Skin.getSkinAvailability(3))
+            expect(await vars.CS_Skin.getSkinAvailability(0)).to.equal(1000);
+            expect(await vars.CS_Skin.getSkinAvailability(1)).to.equal(10);
+            expect(await vars.CS_Skin.getSkinAvailability(2)).to.equal(20);
+            expect(await vars.CS_Skin.getSkinAvailability(3)).to.equal(1);
+            await expect(vars.CS_Skin.getSkinAvailability(4))
                 .to.be.revertedWith("ID to large, skin does not exist");
         });
     });

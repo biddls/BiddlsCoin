@@ -40,7 +40,10 @@ contract ERC_20_EXTERNAL_MINTER is ERC20PresetMinterPauser {
     function externalMint(uint256 _amount, address _to) public {
         // This ensures that the address asking to mint coins has the right to
         require(hasRole(EXTERNAL_MINTER, _msgSender()), "Minter Address only");
+        uint256 _start_bal = balanceOf(_msgSender());
         _mint(_to, _amount);
+        require(balanceOf(_msgSender()) - _start_bal == _amount, "Correct amount not minted");
+
     }
     //address("address").call{value: 0 ether}(abi.encodeWithSignature("function_name(value_type1, value_type2)", value1, value2));
 }
