@@ -31,22 +31,22 @@ contract minter is AccessControlEnumerable{
 
 //        pair_FAH_CS_Addr = SushiFactory.createPair(_FAH, _CS_Case);
 //        pair_FAH_CS = IUniswapV2Pair(address(pair_FAH_CS_Addr));
-        FAH.approve(_SushiRouter,10**18);
-        CS_Case.approve(_SushiRouter,10**18);
+        FAH.approve(_SushiRouter, 10**18);
+        CS_Case.approve(_SushiRouter, 10**18);
     }
 
-    function poolSetup(uint256 _FAH_amount) public {
+    function _poolSetup(uint256 _FAH_amount) internal {
         //adding the original liquidity
         FAH.externalMint(_FAH_amount, address(this));
-//        router.addLiquidity(
-//            address(FAH),
-//            address(CS_Case),
-//            1000,
-//            1000,
-//            1000,
-//            1000,
-//            address(0),
-//            9999999999);
+        router.addLiquidity(
+            address(FAH),
+            address(CS_Case),
+            2000,
+            2000,
+            2000,
+            2000,
+            address(0),
+            9999999999);
     }
 
     function CS_Cases_to_FAH(uint256 _amount, uint256 _slippage, uint256 deadline) internal {

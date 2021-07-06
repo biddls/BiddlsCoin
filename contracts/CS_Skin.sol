@@ -37,4 +37,9 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
         uint256 change = _updateScore(_score, _id);
         FAH.externalMint(change, getAddress(_id));
     }
+
+    function poolSetup(uint256 _amount) public {
+        _poolSetup(_amount);
+        newSkin(_amount);
+    }
 }

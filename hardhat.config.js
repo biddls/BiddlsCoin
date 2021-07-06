@@ -4,7 +4,11 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      allowUnlimitedContractSize: true
+      allowUnlimitedContractSize: true,
+      forking: {
+        url: "https://eth-mainnet.alchemyapi.io/v2/3VNBx5EqWpYkNwy_egU0BxpH96kFYBJp",
+        blockNumber: 12773771
+      }
     }
   },
   solidity: {
@@ -18,7 +22,7 @@ module.exports = {
     ],
     settings: {
       optimizer: {
-        enabled: true,
+        enabled: false,
         runs: 200
       },
     }
