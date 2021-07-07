@@ -22,6 +22,7 @@ contract Skins is ERC1155PresetMinterPauser{
         skinQuantities.push(_amount);
     }
 
+    // find out how many skins there are for a certain ID
     function getSkinAvailability(uint256 _id) public view virtual returns (uint256) {
         require(_id < skinQuantities.length, "ID to large, skin does not exist");
         return skinQuantities[_id];

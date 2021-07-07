@@ -2,20 +2,20 @@
 pragma solidity ^0.8.0;
 
 import "./utility/users.sol";
-import "./utility/minter.sol";
+import "./utility/LP_manager.sol";
 import "./utility/Skins.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
 
 // this version will assume that everyone is nice... for now
-contract CS_Skin is users, minter, Skins, ERC1155Holder{
+contract CS_Skin is users, LP_manager, Skins, ERC1155Holder{
     constructor(address _FAH,
         address _CS_Case,
-        address _SushiFactory,
-        address _SushiRouter) minter(_FAH,
+        address _factory,
+        address _router) LP_manager(_FAH,
         _CS_Case,
-        _SushiFactory,
-        _SushiRouter){
+        _factory,
+        _router){
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -27,9 +27,10 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
     }
 
     // makes a new skin then sells the cases to the sushi pool so people can buy them
-    function newSkin(uint256 _amount) public {
+    function newSkin(uint256 _amount, uint256 _deadline) public {
         _newSkin(_amount);
         CS_Case.externalMint(_amount, address(this));
+        CS_Cases_to_FAH(_amount,970,_deadline);
     }
 
     // allows a user to update their score
@@ -39,7 +40,8 @@ contract CS_Skin is users, minter, Skins, ERC1155Holder{
     }
 
     function poolSetup(uint256 _amount) public {
+        _newSkin(_amount);
+        CS_Case.externalMint(_amount, address(this));
         _poolSetup(_amount);
-        newSkin(_amount);
     }
 }

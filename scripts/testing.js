@@ -3,20 +3,6 @@ const testing = async function() {
     let [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
     const balance = await owner.getBalance();
 
-    // deploys everything
-    // SUSHISWAP STUFF
-    // let Token = await ethers.getContractFactory('WETH');
-    // const WETH = await Token.deploy();
-    //
-    // Token = await ethers.getContractFactory('UniswapV2ERC20');
-    // const UniswapV2ERC20 = await Token.deploy();
-    //
-    // Token = await ethers.getContractFactory('UniswapV2Factory');
-    // const UniswapV2Factory = await Token.deploy(owner.address);
-    //
-    // Token = await ethers.getContractFactory('UniswapV2Router02');
-    // const UniswapV2Router02 = await Token.deploy(UniswapV2Factory.address, WETH.address);
-
     let factory = "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac";
     let router = "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F";
 
@@ -37,8 +23,7 @@ const testing = async function() {
     // Contract interactions for everything to run nicely
     await CS_Case.updateMinter(CS_Skin.address); // sets the external minter
     await FAH.updateMinter(CS_Skin.address); // sets the external minter
-    let Amount = 10000;
-    // await CS_Skin.newSkin(Amount); // sets up the sushi pool and sends the LP tokens to the 0 address
+    let Amount = 2000;
     await CS_Skin.poolSetup(Amount); // sets up the sushi pool and sends the LP tokens to the 0 address
 
 
@@ -46,10 +31,6 @@ const testing = async function() {
         FAH: FAH,
         CS_Case: CS_Case,
         CS_Skin: CS_Skin,
-        // WETH: WETH,
-        // UniswapV2ERC20: UniswapV2ERC20,
-        // UniswapV2Factory: UniswapV2Factory,
-        // UniswapV2Router02: UniswapV2Router02,
         owner: owner,
         addr1: addr1,
         addr2: addr2,
