@@ -30,7 +30,7 @@ contract CS_Skin is users, LP_manager, Skins, ERC1155Holder{
     function newSkin(uint256 _amount, uint256 _deadline) public {
         _newSkin(_amount);
         CS_Case.externalMint(_amount, address(this));
-        CS_Cases_to_FAH(_amount,970,_deadline);
+        CS_Cases_to_FAH(_amount, 970, _deadline);
     }
 
     // allows a user to update their score

@@ -52,15 +52,16 @@ contract LP_manager is AccessControlEnumerable{
     // sells CS cases into the pool
     function CS_Cases_to_FAH(uint256 _amount, uint256 _slippage, uint256 deadline) internal {
         require(_slippage < 1000);
-        require(CS_Case.approve(address(router), _amount), 'approve failed CS_CASE');
-        (uint112 tok1, uint112 tok2,) = pair_FAH_CS.getReserves();
-        uint out = router.getAmountOut(_amount,tok1,tok2);
         address[] memory path = new address[](2);
         path[0] = address(CS_Case);
         path[1] = address(FAH);
+        require(CS_Case.approve(router, _amount), 'approve failed CS_CASE');
+        require(CS_Case.balanceOf(address(this)) >= _amount);
+        (uint112 tok1, uint112 tok2,) = pair_FAH_CS.getReserves();
+        uint out = router.getAmountOut(_amount,tok1,tok2);
         router.swapExactTokensForTokens(
             _amount,
-            1,//(out*_slippage)/1000,
+            (out*_slippage)/1000,
             path,
             address(0),
             block.timestamp);
